@@ -160,26 +160,6 @@ THISUSER=$(whoami)
            exit 1
     fi
 
-## report hypervisor
-hypervisor=$(sudo dmidecode -s system-product-name)
-version=$(cat /opt/openflixr/version)
-
-if [ \"\$hypervisor\" == 'VirtualBox' ]
-  then
-      curl -s \"http://www.openflixr.com/stats.php?vm=VirtualBox&version=\$version\"
-    elif [ \"\$hypervisor\" == 'Virtual Machine' ]
-  then
-      curl -s \"http://www.openflixr.com/stats.php?vm=HyperV&version=\$version\"
-    elif [ \"\$hypervisor\" == 'Parallels Virtual Platform' ]
-  then
-      curl -s \"http://www.openflixr.com/stats.php?vm=Parallels&version=\$version\"
-    elif [ \"\$hypervisor\" == 'VMware Virtual Platform' ]
-  then
-      curl -s \"http://www.openflixr.com/stats.php?vm=VMware&version=\$version\"
-    else
-      curl -s \"http://www.openflixr.com/stats.php?vm=Other&version=\$version\"
-fi
-
 ## variables
 networkconfig=$networkconfig
 ip='$ip'
@@ -220,9 +200,6 @@ if [ \"\$oldpassword\" == '' ]
     oldpassword='openflixr'
 fi
 
-# fixes
-rd /etc/monit/conf.d/certificate
-
 ## stop services
 service couchpotato stop
 service headphones stop
@@ -231,7 +208,6 @@ service mylar stop
 service sickrage stop
 service jackett stop
 service mopidy stop
-service ntopng stop
 service monit stop
 
 ## generate api keys
@@ -242,6 +218,8 @@ mylapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 sabapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 jackapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 sonapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
+radapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
+lazapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 echo \"Couchpotato \$couchapi\" >/opt/openflixr/api.keys
 echo \"Sickrage \$sickapi\" >>/opt/openflixr/api.keys
 echo \"Headphones \$headapi\" >>/opt/openflixr/api.keys
@@ -249,6 +227,8 @@ echo \"Mylar \$mylapi\" >>/opt/openflixr/api.keys
 echo \"SABnzbd \$sabapi\" >>/opt/openflixr/api.keys
 echo \"Jackett \$jackapi\" >>/opt/openflixr/api.keys
 echo \"Sonarr \$sonapi\" >>/opt/openflixr/api.keys
+echo \"Radarr \$radapi\" >>/opt/openflixr/api.keys
+echo \"LazyLibrarian \$lazapi\" >>/opt/openflixr/api.keys
 
 ## htpcmanager
 cd /opt/HTPCManager/userdata
@@ -274,18 +254,6 @@ crudini --set /opt/headphones/config.ini SABnzbd sab_apikey \$sabapi
 ## mylar
 crudini --set /opt/Mylar/config.ini General api_key \$mylapi
 crudini --set /opt/Mylar/config.ini SABnzbd sab_apikey \$sabapi
-
-## plex
-cp /opt/config/monit/plex /etc/monit/conf.d/
-
-## miscellaneous
-cp /opt/config/monit/mopidy /etc/monit/conf.d/
-cp /opt/config/monit/nfs /etc/monit/conf.d/
-cp /opt/config/monit/ntp /etc/monit/conf.d/
-cp /opt/config/monit/redis /etc/monit/conf.d/
-cp /opt/config/monit/ssh /etc/monit/conf.d/
-cp /opt/config/monit/webmin /etc/monit/conf.d/
-cp /opt/config/monit/nzbhydra /etc/monit/conf.d/
 
 ## plexrequests
 plexreqapi=$(curl -s -X GET --header 'Accept: application/json' 'http://localhost:3579/request/api/apikey?username=openflixr&password='\$oldpassword'' | cut -c10-41)
@@ -359,10 +327,6 @@ curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: appl
   \"SubDir\": \"sickrage\"
 }' 'http://localhost:3579/request/api/settings/sickrage?apikey='\$plexreqapi''
 
-    systemctl disable sonarr.service
-    update-rc.d sickrage enable
-    cp /opt/config/monit/sickrage /etc/monit/conf.d/
-    rm /etc/monit/conf.d/sonarr
     sqlite3 database.db \"UPDATE setting SET val='on' where key='sickrage_enable';\"
     sqlite3 database.db \"UPDATE setting SET val='0' where key='sonarr_enable';\"
 
@@ -377,10 +341,6 @@ curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: appl
   \"SubDir\": \"sickrage\"
 }' 'http://localhost:3579/request/api/settings/sickrage?apikey='\$plexreqapi''
 
-    systemctl enable sonarr.service
-    update-rc.d sickrage disable
-    cp /opt/config/monit/sonarr /etc/monit/conf.d/
-    rm /etc/monit/conf.d/sickrage
     sqlite3 database.db \"UPDATE setting SET val='0' where key='sickrage_enable';\"
     sqlite3 database.db \"UPDATE setting SET val='on' where key='sonarr_enable';\"
 
@@ -393,49 +353,11 @@ sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$sonapi'<\/ApiKey>/' /root/.config/NzbDrone/
 ## nzb downloader
     if [ \"\$nzbdl\" == 'sabnzbd' ]
         then
-          systemctl disable nzbget.service
-          update-rc.d sabnzbdplus enable
-          cp /opt/config/monit/sabnzbd /etc/monit/conf.d/
-          rm /etc/monit/conf.d/nzbget
           sqlite3 database.db \"UPDATE setting SET val='on' where key='sabnzbd_enable';\"
           sqlite3 database.db \"UPDATE setting SET val='0' where key='nzbget_enable';\"
     else
-          systemctl enable nzbget.service
-          update-rc.d sabnzbdplus disable
-          cp /opt/config/monit/nzbget /etc/monit/conf.d/
-          rm /etc/monit/conf.d/sabnzbd
           sqlite3 database.db \"UPDATE setting SET val='0' where key='sabnzbd_enable';\"
           sqlite3 database.db \"UPDATE setting SET val='on' where key='nzbget_enable';\"
-    fi
-
-## mopidy
-    if [ \"\$mopidy\" == 'enabled' ]
-        then
-          update-rc.d mopidy enable
-          cp /opt/config/monit/mopidy /etc/monit/conf.d/
-    else
-          update-rc.d mopidy disable
-          rm /etc/monit/conf.d/mopidy
-    fi
-
-## home assistant
-    if [ \"\$hass\" == 'enabled' ]
-        then
-          systemctl enable home-assistant.service
-          cp /opt/config/monit/hass /etc/monit/conf.d/
-    else
-          systemctl disable home-assistant.service
-          rm /etc/monit/conf.d/hass
-    fi
-
-## ntopng
-    if [ \"\$ntopng\" == 'enabled' ]
-        then
-          systemctl enable ntopng.service
-          cp /opt/config/monit/ntopng /etc/monit/conf.d/
-    else
-          systemctl disable ntopng.service
-          rm /etc/monit/conf.d/ntopng
     fi
 
 ## headphones vip
@@ -510,12 +432,9 @@ mysql -e \"UPDATE mysql.user SET authentication_string = PASSWORD('$password') W
 killall -v mysqld
 sleep 5
 service mysql restart
-sed -i 's/^-F \"mysql.*/-F \"mysql;localhost;ntopng;flows;root;$password\"/' /etc/ntopng/ntopng.conf
-sed -i \"s/^.*PSM_DB_PASS.*/define('PSM_DB_PASS', '$password');/\" /usr/share/nginx/html/phpservermonitor/config.php
 sed -i \"s/^.*\['pass'\].*/\\\$dbsettings\['pass'\] = '$password';/\" /var/www/spotweb/dbsettings.inc.php
 
 ## network
-nwadapter=$(ifconfig -a | sed -n 's/^\([^ ]\+\).*/\\1/p' | grep -Fvx -e lo -e dummy0)
     if [ \"\$ip\" != '' ]
     then
 cat > /etc/network/interfaces<<EOF
@@ -525,11 +444,11 @@ cat > /etc/network/interfaces<<EOF
 source /etc/network/interfaces.d/*
 
 # The loopback network interface
-auto lo \$nwadapter
+auto lo eth0
 iface lo inet loopback
 
 # The primary network interface
-iface \$nwadapter inet static
+iface eth0 inet static
 address $ip
 netmask $subnet
 gateway $gateway
@@ -543,11 +462,11 @@ cat > /etc/network/interfaces<<EOF
 source /etc/network/interfaces.d/*
 
 # The loopback network interface
-auto lo \$nwadapter
+auto lo eth0
 iface lo inet loopback
 
 # The primary network interface
-iface \$nwadapter inet dhcp
+iface eth0 inet dhcp
 dns-nameservers 127.0.0.1
 EOF
 
