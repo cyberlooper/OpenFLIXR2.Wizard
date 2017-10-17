@@ -419,7 +419,6 @@ sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$sonapi'<\/ApiKey>/' /root/.config/NzbDrone/
 #usersettings / id3 / otherprefs | sabnzbd api + password
 
 ## passwords
-printf \"$password\\n$password\\n\" | sudo smbpasswd -a -s openflixr
 echo openflixr:'$password' | sudo chpasswd
 htpasswd -b /etc/nginx/.htpasswd openflixr '$password'
 
