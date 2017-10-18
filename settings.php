@@ -539,6 +539,17 @@ crudini --set /usr/share/nginx/html/setup/config.ini custom custom15 $jackapi
 crudini --set /usr/share/nginx/html/setup/config.ini custom custom16 $sonapi
 
 systemctl --system daemon-reload
+if [ \"\$ip\" != '' ]
+  then
+    sed -i 's/IPV4_ADDRESS.*/IPV4_ADDRESS='\$ip'\/24/' /etc/pihole/setupVars.conf
+    service pihole-FTL restart
+    pihole -g -sd
+  else
+    ip=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+    sed -i 's/IPV4_ADDRESS.*/IPV4_ADDRESS='\$ip'\/24/' /etc/pihole/setupVars.conf
+    service pihole-FTL restart
+    pihole -g -sd
+fi
 bash /opt/openflixr/updatewkly.sh
 reboot now");
 fclose($file);
