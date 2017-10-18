@@ -550,6 +550,7 @@ if [ \"\$ip\" != '' ]
     service pihole-FTL restart
     pihole -g -sd
 fi
+bash /opt/update/onlineupdate.sh
 bash /opt/openflixr/updatewkly.sh
 reboot now");
 fclose($file);
