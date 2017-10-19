@@ -541,16 +541,19 @@ crudini --set /usr/share/nginx/html/setup/config.ini custom custom16 $sonapi
 systemctl --system daemon-reload
 if [ \"\$ip\" != '' ]
   then
-    sed -i 's/IPV4_ADDRESS.*/IPV4_ADDRESS='\$ip'\/24/' /etc/pihole/setupVars.conf
+    sed -i 's/IPV4_ADDRESS.*/IPV4_ADDRESS='\$ip'/' /etc/pihole/setupVars.conf
     service pihole-FTL restart
     pihole -g -sd
   else
     ip=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
-    sed -i 's/IPV4_ADDRESS.*/IPV4_ADDRESS='\$ip'\/24/' /etc/pihole/setupVars.conf
+    sed -i 's/IPV4_ADDRESS.*/IPV4_ADDRESS='\$ip'/' /etc/pihole/setupVars.conf
     service pihole-FTL restart
     pihole -g -sd
 fi
 bash /opt/update/onlineupdate.sh
+sed -i 's/<theme>default<\/theme>/<theme>dark<\/theme><insecureSkipHostcheck>true<\/insecureSkipHostcheck>/' /home/openflixr/.config/syncthing/config.xml
+sed -i 's/<startBrowser>true<\/startBrowser>/<startBrowser>false<\/startBrowser>/' /home/openflixr/.config/syncthing/config.xml
+sed -i 's/<urAccepted>0<\/urAccepted>/<urAccepted>-1<\/urAccepted>/' /home/openflixr/.config/syncthing/config.xml
 bash /opt/openflixr/updatewkly.sh
 reboot now");
 fclose($file);
