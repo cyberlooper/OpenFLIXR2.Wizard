@@ -423,15 +423,15 @@ echo openflixr:'$password' | sudo chpasswd
 htpasswd -b /etc/nginx/.htpasswd openflixr '$password'
 
 ## MySQL
-service mysql stop
-killall -vw mysqld
-mysqld_safe --skip-grant-tables >res 2>&1 &
-sleep 10
-mysql -e \"UPDATE mysql.user SET authentication_string = PASSWORD('$password') WHERE User = 'root' AND Host = 'localhost';FLUSH PRIVILEGES;\"
-killall -v mysqld
-sleep 5
-service mysql restart
-sed -i \"s/^.*\['pass'\].*/\\\$dbsettings\['pass'\] = '$password';/\" /var/www/spotweb/dbsettings.inc.php
+#service mysql stop
+#killall -vw mysqld
+#mysqld_safe --skip-grant-tables >res 2>&1 &
+#sleep 10
+#mysql -e \"UPDATE mysql.user SET authentication_string = PASSWORD('$password') WHERE User = 'root' AND Host = 'localhost';FLUSH PRIVILEGES;\"
+#killall -v mysqld
+#sleep 5
+#service mysql restart
+#sed -i \"s/^.*\['pass'\].*/\\\$dbsettings\['pass'\] = 'openflixr';/\" /var/www/spotweb/dbsettings.inc.php
 
 ## network
     if [ \"\$ip\" != '' ]
