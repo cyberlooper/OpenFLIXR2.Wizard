@@ -149,14 +149,14 @@ $file = fopen("setup.sh","w");
 fwrite($file,"#!/bin/bash
 exec 1> >(tee -a /var/log/openflixrsetup.log) 2>&1
 TODAY=$(date)
-echo \"-----------------------------------------------------\"
-echo \"Date:          \$TODAY\"
-echo \"-----------------------------------------------------\"
+printf \"-----------------------------------------------------\"
+printf \"Date:          \$TODAY\"
+printf \"-----------------------------------------------------\"
 
 THISUSER=$(whoami)
     if [ \$THISUSER != 'root' ]
         then
-            echo 'You must use sudo to run this script, sorry!'
+            printf 'You must use sudo to run this script, sorry!'
            exit 1
     fi
 
