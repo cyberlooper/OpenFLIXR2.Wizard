@@ -614,7 +614,7 @@ echo "\n";
 echo "                                </div>\n";
 echo "                                <div class=\"wizard-footer\">\n";
 echo "                                    <div class=\"pull-right\">\n";
-echo "                                        <input type='button' disabled class='btn btn-next btn-fill btn-success btn-wd btn-sm' name='next' value='Disabled until next release' />\n";
+echo "                                        <input type='button' class='btn btn-next btn-fill btn-success btn-wd btn-sm' name='next' value='Next' />\n";
 echo "                                        <input type='submit' class='btn btn-finish btn-fill btn-success btn-wd btn-sm' name='finish' value='Finish' />\n";
 echo "\n";
 echo "                                    </div>\n";
