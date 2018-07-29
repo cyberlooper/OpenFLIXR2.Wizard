@@ -5,7 +5,7 @@ $(document).ready(function() {
     $(window).keydown(function(event) {
         if (event.keyCode == 13) {
             event.preventDefault();
-            return false;
+            return true;
         }
     });
 });
@@ -59,7 +59,7 @@ $(document).ready(function() {
         },
         onTabClick: function(tab, navigation, index) {
             // Disable the posibility to click on tabs
-            return true;
+            return false;
         },
         onTabShow: function(tab, navigation, index) {
             var $total = navigation.find('li').length;
