@@ -481,7 +481,7 @@ echo "\n";
 echo "                                    <div class=\"tab-pane\" id=\"login\">\n";
 echo "                                        <div class=\"row\">\n";
 echo "                                            <div class=\"col-sm-12\">\n";
-echo "                                                <h4 class=\"info-text\">Set new global password</h4>\n";
+echo "                                                <h4 class=\"info-text\">Set new password</h4>\n";
 echo "                                            </div>\n";
 echo "\n";
 echo "                                            <div class=\"col-sm-4 col-sm-offset-4\">\n";

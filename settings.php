@@ -201,14 +201,20 @@ if [ \"\$oldpassword\" == '' ]
 fi
 
 ## stop services
-service couchpotato stop
-service headphones stop
-service htpcmanager stop
-service mylar stop
-service sickrage stop
-service jackett stop
-service mopidy stop
 service monit stop
+service couchpotato stop
+service sickrage stop
+service headphones stop
+service mylar stop
+service sabnzbdplus stop
+service jackett stop
+service sonarr stop
+service radarr stop
+service lidarr stop
+service lazylibrarian stop
+service htpcmanager stop
+service mopidy stop
+service nzbhydra2 stop
 
 ## generate api keys
 couchapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
@@ -219,7 +225,11 @@ sabapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 jackapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 sonapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 radapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
+lidapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
 lazapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
+nzbhydrapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
+plexpyapi=$(uuidgen | tr -d - | tr -d '' | tr '[:upper:]' '[:lower:]')
+
 echo \"Couchpotato \$couchapi\" >/opt/openflixr/api.keys
 echo \"Sickrage \$sickapi\" >>/opt/openflixr/api.keys
 echo \"Headphones \$headapi\" >>/opt/openflixr/api.keys
@@ -228,16 +238,22 @@ echo \"SABnzbd \$sabapi\" >>/opt/openflixr/api.keys
 echo \"Jackett \$jackapi\" >>/opt/openflixr/api.keys
 echo \"Sonarr \$sonapi\" >>/opt/openflixr/api.keys
 echo \"Radarr \$radapi\" >>/opt/openflixr/api.keys
+echo \"Lidarr \$lidapi\" >>/opt/openflixr/api.keys
 echo \"LazyLibrarian \$lazapi\" >>/opt/openflixr/api.keys
+echo \"NZBHydra \$nzbhydrapi\" >>/opt/openflixr/api.keys
+echo \"PlexPy \$plexpyapi\" >>/opt/openflixr/api.keys
 
 ## htpcmanager
 cd /opt/HTPCManager/userdata
 sqlite3 database.db \"UPDATE setting SET val='\$couchapi' where key='couchpotato_apikey';\"
-sqlite3 database.db \"UPDATE setting SET val='\$headapi' where key='headphones_apikey';\"
-sqlite3 database.db \"UPDATE setting SET val='\$sabapi' where key='sabnzbd_apikey';\"
 sqlite3 database.db \"UPDATE setting SET val='\$sickapi' where key='sickrage_apikey';\"
+sqlite3 database.db \"UPDATE setting SET val='\$headapi' where key='headphones_apikey';\"
 sqlite3 database.db \"UPDATE setting SET val='\$mylapi' where key='mylar_apikey';\"
+sqlite3 database.db \"UPDATE setting SET val='\$sabapi' where key='sabnzbd_apikey';\"
+sqlite3 database.db \"UPDATE setting SET val='\$jackapi' where key='torrents_jackett_apikey';\"
 sqlite3 database.db \"UPDATE setting SET val='\$sonapi' where key='sonarr_apikey';\"
+sqlite3 database.db \"UPDATE setting SET val='\$radapi' where key='radarr_apikey';\"
+sqlite3 database.db \"UPDATE setting SET val='\$plexpyapi' where key='plexpy_apikey';\"
 
 ## couchpotato
 crudini --set /opt/CouchPotato/settings.conf core api_key \$couchapi
@@ -254,6 +270,34 @@ crudini --set /opt/headphones/config.ini SABnzbd sab_apikey \$sabapi
 ## mylar
 crudini --set /opt/Mylar/config.ini General api_key \$mylapi
 crudini --set /opt/Mylar/config.ini SABnzbd sab_apikey \$sabapi
+
+## jackett
+/root/.config/Jackett/ServerConfig.json
+  "APIKey": "03fl3cs2txrxmrvpwmb2sp8b73ko4frl",
+
+## sonarr
+sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$sonapi'<\/ApiKey>/' /root/.config/NzbDrone/config.xml
+Sabnzbd en NZBget API keys invullen, voor alle applicaties
+
+## radarr
+sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$radapi'<\/ApiKey>/' /root/.config/Radarr/config.xml
+
+## lidarr
+sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$lidapi'<\/ApiKey>/' /home/openflixr/.config/Lidarr/config.xml
+
+## lazylibrarian
+crudini --set /opt/LazyLibrarian/lazylibrarian.ini SABnzbd sab_apikey \$sabapi
+
+[USENET]
+nzb_downloader_sabnzbd = 1
+nzb_downloader_nzbget = 0
+
+## nzbhydra (is dat de enige apiKey?)
+/opt/nzbhydra2/data/nzbhydra.yml
+  apiKey: "aqpep52c61fkbc8br0tiu53508"
+
+## plexpy
+crudini --set /opt/plexpy/config.ini General api_key \$plexpyapi
 
 ## plexrequests
 plexreqapi=$(curl -s -X GET --header 'Accept: application/json' 'http://localhost:3579/request/api/apikey?username=openflixr&password='\$oldpassword'' | cut -c10-41)
@@ -348,7 +392,6 @@ curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: appl
 
 ## sonarr
 service sonarr stop
-sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$sonapi'<\/ApiKey>/' /root/.config/NzbDrone/config.xml
 
 ## nzb downloader
     if [ \"\$nzbdl\" == 'sabnzbd' ]
