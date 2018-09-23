@@ -283,7 +283,7 @@ Sabnzbd en NZBget API keys invullen, voor alle applicaties
 sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$radapi'<\/ApiKey>/' /root/.config/Radarr/config.xml
 
 ## lidarr
-sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$lidapi'<\/ApiKey>/' /home/openflixr/.config/Lidarr/config.xml
+sed -i 's/^  <ApiKey>.*/  <ApiKey>'\$lidapi'<\/ApiKey>/' /root/.config/Lidarr/config.xml
 
 ## lazylibrarian
 crudini --set /opt/LazyLibrarian/lazylibrarian.ini SABnzbd sab_apikey \$sabapi
