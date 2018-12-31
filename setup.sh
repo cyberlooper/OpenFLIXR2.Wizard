@@ -413,8 +413,6 @@ if [ "$ip" != '' ]
     pihole -g -sd
 fi
 
-exit
-
 echo ""
 echo "Updating OpenFLIXR"
 bash /opt/update/onlineupdate.sh
