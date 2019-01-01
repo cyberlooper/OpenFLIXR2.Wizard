@@ -422,5 +422,5 @@ sed -i 's/<urAccepted>0<\/urAccepted>/<urAccepted>-1<\/urAccepted>/' /home/openf
 bash /opt/openflixr/updatewkly.sh
 
 echo "System rebooting in about 5 seconds."
-sleep 5000
+sleep 5s
 reboot now
