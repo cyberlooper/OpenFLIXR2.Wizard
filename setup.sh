@@ -107,7 +107,7 @@ nzb_downloader_nzbget=0
 
 ## plexpy
 echo "- Tautulli (PlexPy)"
-crudini --set /opt/plexpy/config.ini General api_key $plexpyapi
+sed -i "s/api_key =.*/api_key = $plexpyapi/g" "${DOCKER_PATH}/tautulli/config/config.ini"
 
 ## plexrequests
 echo "- PlexRequests"
