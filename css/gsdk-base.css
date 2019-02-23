@@ -79,7 +79,7 @@ p{
     line-height: 1.6180em;
 }
 h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small, h1 .small, h2 .small, h3 .small, h4 .small, h5 .small, h6 .small, .h1 .small, .h2 .small, .h3 .small, .h4 .small, .h5 .small, .h6 .small {
-    color: #999999;
+    color: #696969;
     font-weight: 300;
     line-height: 1;
 }
@@ -136,7 +136,7 @@ h1 .subtitle{
 }
 .btn-default{
     color: #777777;
-    border-color: #999999
+    border-color: #696969
 }
 .btn-primary {
     color: #3472F7;
@@ -231,8 +231,8 @@ h1 .subtitle{
     color: #FFFFFF;
 }
 .btn-default.btn-fill{
-    background-color: #999999;
-    border-color: #999999
+    background-color: #696969;
+    border-color: #696969
 }
 .btn-primary.btn-fill{
     background-color: #3472F7;
@@ -375,16 +375,16 @@ h1 .subtitle{
 }
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
     background-color: #EEEEEE;
-    color: #999999;
+    color: #696969;
     cursor: not-allowed;
 }
 
 /*           Labels & Progress-bar              */
 .label{
     padding: 0.2em 0.6em 0.2em;
-    border: 1px solid #999999;
+    border: 1px solid #696969;
     border-radius: 3px;
-    color: #999999;
+    color: #696969;
     background-color: #FFFFFF;
     font-weight: 500;
     font-size: 11px;
@@ -446,7 +446,7 @@ label.valid{
 }
 
 label small{
-    color: #999999;
+    color: #696969;
 }
 
 .label.label-fill{
@@ -468,7 +468,7 @@ label small{
    background-color: #FF3B30;
 }
 .label-default.label-fill{
-   background-color: #999999;
+   background-color: #696969;
 }
 
 .progress {
@@ -765,7 +765,7 @@ label{
 .wizard-card .picture{
     width: 106px;
     height: 106px;
-    background-color: #999999;
+    background-color: #696969;
     border: 4px solid #CCCCCC;
     color: #FFFFFF;
     border-radius: 50%;
@@ -830,7 +830,7 @@ label{
 .wizard-card .nav-pills > li a {
     border: 0 !important;
     text-transform: uppercase;
-    background-color: #999999;
+    background-color: #696969;
     color: #FFFFFF !important;
     font-size: 12px;
 }
@@ -851,7 +851,7 @@ label{
 }
 
 .wizard-card .nav-pills > li > a:hover, .wizard-card .nav-pills > li > a:focus{
-    background-color: #999999;
+    background-color: #696969;
     cursor: default;
 }
 .wizard-card .btn{
@@ -880,10 +880,10 @@ label{
    height: 116px;
    width: 116px;
    border-radius: 50%;
-   background-color: #999999;
+   background-color: #696969;
    color: #FFFFFF;
    margin: 0 auto 20px;
-   border: 4px solid #999999;
+   border: 4px solid #696969;
    transition: all 0.2s;
    -webkit-transition: all 0.2s;
 }
@@ -923,7 +923,7 @@ label{
 }
 
 .wizard-card .description{
-    color: #999999;
+    color: #696969;
     font-size: 14px;
 }
 

@@ -24,7 +24,7 @@ echo "\n";
 echo "</head>\n";
 echo "\n";
 echo "<body>\n";
-echo "    <div class=\"image-container set-full-height\" style=\"background-color: #4c4c4c;\">\n";
+echo "    <div class=\"image-container set-full-height\" style=\"background-image: radial-gradient(circle, #717171, #6f6f6f, #6d6d6d, #6b6b6b, #696969);\">\n";
 echo "        <div class=\"container\">\n";
 echo "            <div class=\"row\">\n";
 echo "                <div class=\"col-sm-10 col-sm-offset-1\">\n";
