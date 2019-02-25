@@ -7,10 +7,6 @@ Smart auto-updating will keep everything up-to-date and running smooth. All prog
 
 > A fully automated media server, ready to go in a couple of minutes!
 ## [Join us on Discord](https://discord.gg/PcCErTQ)
-***
 ## [Get more info at openflixr.com](http://www.openflixr.com)
 
-
-![OpenFLIXR Landing Page](/img/screen.png)
-
-![OpenFLIXR Landing Page Recent Movies](/img/screen2.png)
+![Setup](/img/screen.png)
